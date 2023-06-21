@@ -13,7 +13,7 @@ Please use this [issue tracker](https://github.com/signetlabdei/quic-ns-3/issues
 ### Prerequisites ###
 
 To run simulations using this module, you will need to install ns-3, clone
-this repository inside the `src` directory, copy the QUIC applications from the quic-applications folder, and patch the `wscript` file of the applications module. 
+this repository inside the `src` directory, copy the QUIC applications from the quic-applications folder, and patch the `CMakeLists.txt` file of the applications module. 
 Required dependencies include git and a build environment.
 
 #### Installing dependencies ####
@@ -38,42 +38,45 @@ git clone https://github.com/signetlabdei/quic quic
 Thirdly, copy the QUIC applications and helpers to the applications module
 
 ```bash
+cd ..
 cp src/quic/quic-applications/model/* src/applications/model/
 cp src/quic/quic-applications/helper/* src/applications/helper/
 ```
 
-Finally, edit the `wscript` file of the applications module and add
+Finally, edit the `CMakeLists.txt` file of the applications module and add
 
 ```python
-        'model/quic-echo-client.h',
-        'model/quic-echo-server.h',
-        'model/quic-client.h',
-        'model/quic-server.h',
-        'helper/quic-echo-helper.h',
-        'helper/quic-client-server-helper.h'
+        model/quic-echo-client.cc
+        model/quic-echo-server.cc
+        model/quic-client.cc
+        model/quic-server.cc
+        helper/quic-echo-helper.cc
+        helper/quic-client-server-helper.cc
 ```
-to the `headers.source` list and
+to the `SOURCE_FILES` section and
 
 ```python
-        'model/quic-echo-client.cc',
-        'model/quic-echo-server.cc',
-        'model/quic-client.cc',
-        'model/quic-server.cc',
-        'helper/quic-echo-helper.cc',
-        'helper/quic-client-server-helper.cc'
+        model/quic-echo-client.h
+        model/quic-echo-server.h
+        model/quic-client.h
+        model/quic-server.h
+        helper/quic-echo-helper.h
+        helper/quic-client-server-helper.h
 ```
-to the `module.source` list
+to the `HEADER_FILES` section.
+
 ### Compilation ###
 
 Configure and build ns-3 from the `ns-3-dev` folder:
 
 ```bash
-./waf configure --enable-tests --enable-examples
-./waf build
+./ns3 configure --enable-tests --enable-examples
+./ns3
 ```
 
 If you are not interested in using the Python bindings, use
+
 ```bash
-./waf configure --enable-tests --enable-examples --disable-python
-./waf build
+./ns3 configure --enable-tests --enable-examples --disable-python
+./ns3
 ```
